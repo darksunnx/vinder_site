@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vkleg adapter by @oaxue</title>
+  <style>
+    /* Фон с динамическим красным градиентом */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #330000, #990000, #ff3333);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Виньетка */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+    }
+    /* Карточка */
+    .container {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 1.2s ease-out;
+    }
+    .container::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.03) 1px, rgba(255,255,255,0.03) 2px);
+      pointer-events: none;
+      border-radius: 1rem;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px);} to { opacity:1; transform: translateY(0);} }
+    @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+    .avatar { width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid #fff; margin-bottom:1rem; animation:float 3s ease-in-out infinite; }
+
+    /* Улучшенный глитч-эффект */
+    .glitch {
+      position: relative;
+      font-size: 2.5rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      clip: rect(0, 9999px, 0, 0);
+    }
+    .glitch::before {
+      left: 2px;
+      text-shadow: -2px 0 red;
+      animation: glitchTop 3s infinite linear alternate-reverse;
+    }
+    .glitch::after {
+      left: -2px;
+      text-shadow: -2px 0 blue;
+      animation: glitchBottom 2.5s infinite linear alternate-reverse;
+    }
+    @keyframes glitchTop {
+      0% { clip: rect(2px, 9999px, 10px, 0); transform: translate(0); }
+      20% { clip: rect(12px, 9999px, 20px, 0); transform: translate(-2px, -2px); }
+      40% { clip: rect(4px, 9999px, 14px, 0); transform: translate(2px, 2px); }
+      60% { clip: rect(8px, 9999px, 18px, 0); transform: translate(-2px, 2px); }
+      80% { clip: rect(5px, 9999px, 15px, 0); transform: translate(2px, -2px); }
+      100% { clip: rect(3px, 9999px, 12px, 0); transform: translate(0); }
+    }
+    @keyframes glitchBottom {
+      0% { clip: rect(60px, 9999px, 70px, 0); transform: translate(0); }
+      20% { clip: rect(65px, 9999px, 75px, 0); transform: translate(2px, 2px); }
+      40% { clip: rect(62px, 9999px, 72px, 0); transform: translate(-2px, -2px); }
+      60% { clip: rect(68px, 9999px, 78px, 0); transform: translate(2px, -2px); }
+      80% { clip: rect(64px, 9999px, 74px, 0); transform: translate(-2px, 2px); }
+      100% { clip: rect(60px, 9999px, 70px, 0); transform: translate(0); }
+    }
+
+    /* Кнопки */
+    .buttons { margin-top:1.5rem; display:flex; flex-direction:column; gap:0.8rem; }
+    .btn { padding:0.75rem 1.5rem; border:none; border-radius:0.5rem; background:linear-gradient(45deg,#ff4d4d,#cc0000); background-size:200% 200%; color:#fff; font-weight:bold; text-decoration:none; transition:background-position 0.3s ease, transform 0.2s ease; }
+    .btn:hover { background-position:100% 0; transform:scale(1.05); }
+
+    /* Описание */
+    .description { margin-top:1.5rem; color:#eee; font-size:1rem; line-height:1.4; }
+
+    @media (max-width:480px) { .container{padding:1rem;} .glitch{font-size:1.8rem;} .btn{padding:0.6rem 1rem;} }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- аватар в той же папке: ava.jpg -->
+    <img class="avatar" src="ava.jpg" alt="Аватар">
+    <!-- ник с глитч-эффектом -->
+    <h1 class="glitch" data-text="vinder">vinder</h1>
+    <div class="buttons">
+      <a class="btn" href="https://t.me/vkleg" target="_blank">Telegram</a>
+      <a class="btn" href="https://t.me/+5oppJe8UE8YwMWE0" target="_blank">Проект</a>
+    </div>
+    <!-- описание профиля -->
+    <p class="description">Привет я vinder админ проекта Revenge Murder. Занимаюсь поиском по открытым источникам (Osint).Удачи!</p>
+  </div>
+</body>
+
+</html>
